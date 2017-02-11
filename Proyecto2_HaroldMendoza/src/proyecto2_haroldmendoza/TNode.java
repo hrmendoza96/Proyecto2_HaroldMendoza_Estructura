@@ -11,39 +11,47 @@ import java.util.ArrayList;
  * @author Harold Mendoza
  */
 public class TNode {
-   Persona root;
-   ArrayList<Persona> Children = new ArrayList();
+   TNode root;
+   ArrayList<TNode> Children = new ArrayList();
+    protected String puesto;
+    protected String nombre;
+    protected double salario;
    
    public TNode() {
     }
 
-    public TNode(Persona root) {
-        this.root = root;
+    public TNode(String puesto, String nombre, double salario) {
+        this.puesto = puesto;
+        this.nombre = nombre;
+        this.salario = salario;
     }
 
-    public Persona getRoot() {
+    public TNode getRoot() {
         return root;
     }
 
-    public void setRoot(Persona root) {
+    public void setRoot(TNode root) {
         this.root = root;
     }
    
-    public ArrayList<Persona> getChildren() {
+    public ArrayList<TNode> getChildren() {
         return Children;
     }
+    public TNode getChildrenAt(int p) {
+        return Children.get(p);
+    }
 
-    public void setChildren(ArrayList<Persona> Children) {
+    public void setChildren(ArrayList<TNode> Children) {
         this.Children = Children;
     }
     
-    public void addChildren(Persona p){
+    public void addChildren(TNode p){
         Children.add(p);
     }
 
     @Override
     public String toString() {
-        return "TreeNode{" + "Children=" + Children + '}';
+        return  puesto + "," + nombre + "," + salario;
     }
     
     

@@ -1,2 +1,9 @@
-Ingeniero,Harold,2000
-	Mercadologa,Gaby,2500
+Presidente,Harold,2000
+	Gerente,Gaby,2500
+	Gerente,Alex,300
+	Gerente,Wilmer,1000
+		Sub-Gerente,Julia,2
+			Operaciones,Javier,300
+				Secretario,Carlos,200
+					Janitor,Juan,100
+	Gerente,Yania,2000

@@ -5,12 +5,8 @@
  */
 package proyecto2_haroldmendoza;
 
-import java.io.BufferedReader;
+
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.util.Scanner;
 
 /**
@@ -35,49 +31,54 @@ public class Proyecto2_HaroldMendoza {
                 Scanner sc = null; 
                 try { 
                     sc = new Scanner(archivo); 
-                    //sc.useDelimiter(",");
                     String line;
-                    int cont=0;
+                    int cont=0; //Contador para ingresar la raiz de todo el arbol la primera vez que se inicie el programa
                     while(sc.hasNextLine()){
                         if(cont==0){
-                            try {
-                                
-                                line = sc.nextLine();
-                                
+                            try { 
+                                line = sc.nextLine();   
                                 Scanner sc2 = new Scanner(line);
                                 sc2.useDelimiter(",");
                                 while(sc2.hasNext()){
-                                   arbol.setRoot(new Persona(sc2.next(),sc2.next(),Double.parseDouble(sc2.next())));
-                                   System.out.println(arbol.getRoot().toString());
-                                    //System.out.println("Hola");
+                                   arbol.setRoot(new TNode(sc2.next(),sc2.next(),Double.parseDouble(sc2.next())));
                                 } // fin while 2.1
-                              // System.out.println("Hola");
                             } catch (Exception e) {
                             }   
                         }else{
                             try {
+                                int contador=0;//contar cantidad de *tabs*
                                 line = sc.nextLine();
-                                Scanner sc2 = new Scanner(line);
-                                sc2.useDelimiter("  ");
-                                while(sc2.hasNext()){
-                                    try {
-                                        String line2 = sc2.nextLine();
-                                        Scanner sc3 = new Scanner(line2);
-                                        sc3.useDelimiter(",");
-                                        while(sc3.hasNext()){
-                                           arbol.addChildren(new Persona(sc3.next(),sc3.next(),Double.parseDouble(sc3.next())));
-                                           System.out.println(arbol.getChildren().get(0).toString());
-                                        } // fin del while 3
-                                    } catch (Exception e) {
-                                    }                             
-                                } // fin del while 2.2
+                                    for (int i = 0; i < line.length(); i++) {
+                                       // System.out.println("Char "+i+")"+line.charAt(i));
+                                        if(line.charAt(i)=='\t'){   
+                                            contador++;
+                                        }
+                                    }
+                               // System.out.println("Contador: "+contador);
+                                Scanner sc3 = new Scanner(line);
+                                sc3.useDelimiter(",");
+                                while(sc3.hasNext()){ //crea los hijos de las roots
+                                    if(contador==1){ //root principal
+                                       String puesto=sc3.next();
+                                       puesto= puesto.substring(contador); //Ignora los espacios en blanco de la primera palabra
+                                       arbol.addChildren(new TNode(puesto,sc3.next(),Double.parseDouble(sc3.next())));
+                                    }else{
+                                        String puesto=sc3.next();//subhijos
+                                        puesto = puesto.substring(contador); //Ignora los espacios en blanco de la primera palabra
+                                        TNode hijo = new TNode(puesto,sc3.next(),Double.parseDouble(sc3.next())); 
+                                        TNode padre = profundidad(arbol.getChildrenAt(arbol.getChildren().size()-1)); //se obtiene el ultimo nodo  
+                                        padre.addChildren(hijo);
+                                    }
+                                    
+                                    
+                                   
+                                } // fin del while 3
                             } catch (Exception e) {
-                            }
-                            
-                        }
-                        
+                            }                             
+                        } // fin del if else
                         cont++;
                     } // fin del while 1
+                    System.out.println();//salto de linea
                     System.out.println("Arbol Jerarquico Cargado Exitosamente");
                 } catch (Exception e) {
                     System.out.println("Arbol Jerarquico No pudo ser cargado");
@@ -88,6 +89,22 @@ public class Proyecto2_HaroldMendoza {
                 
             }  
             if(respuesta==2){ //Ver Jerarquia
+                try {
+                    System.out.println(arbol.getRoot().toString());//se imprime root
+                    for (TNode temp : arbol.getChildren()) { //Imprimir hijos de root   
+                        String aux="\t"+ImprimirTree(temp,1); //se manda el padre para obtener hijo, y se manda la profundidad inicial que es de 1
+                        System.out.println(aux);
+                    }//fin fore
+                    
+                } catch (Exception e) {
+                    System.out.println("");
+                    System.out.println("Arbol vacio. Porfavor Presionar Opcion 1 para llenar.");
+                    System.out.println("");
+                }
+               
+                
+                
+                
                 
             }
             if(respuesta==3){ //Salir
@@ -107,4 +124,36 @@ public class Proyecto2_HaroldMendoza {
         System.out.print("Ingrese su respuesta: ");
     }
     
+    public static TNode profundidad(TNode padre){ //metodo recursivo para encontrrar el padre del ultimo nodo
+       if(padre.getChildren().isEmpty()){
+           return padre;
+       }else{
+           return profundidad(padre.getChildrenAt(padre.getChildren().size()-1));
+       }
+        
+    }
+    /**
+     * 
+     * @param padre
+     * @param profundidad
+     * @return El hijo del nodo padre enviado
+     */
+    public static TNode ImprimirTree(TNode padre,int profundidad){ 
+       if(padre.getChildren().isEmpty()){
+           //System.out.println("\t"+padre.toString());
+           return padre;
+       }else{
+           System.out.println("\t"+padre.toString());
+           for (int i = 0; i < profundidad; i++) { //for para hacer los tabs de profundidad
+               System.out.print("\t");
+           }
+           return ImprimirTree(padre.getChildrenAt(padre.getChildren().size()-1),profundidad+1);
+           //System.out.print("\t"+aux);
+           //System.out.print("\t");
+           //ImprimirTree(padre.getChildrenAt(padre.getChildren().size()-1));
+           
+       }
+        
+        
+    }
 }
