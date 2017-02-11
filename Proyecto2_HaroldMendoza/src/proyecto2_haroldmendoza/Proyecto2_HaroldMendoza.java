@@ -24,10 +24,12 @@ public class Proyecto2_HaroldMendoza {
         TNode arbol= new TNode();
         int respuesta;
         File archivo = new File("./Jerarquia.txt");
+        boolean SeIngreso=false; //boolean para validar que ya se ingreso 1 vez para llenar arbol
         do {
             menu();
-            respuesta = scan.nextInt();   
-            if(respuesta==1){ //Cargar Arbol
+            respuesta = scan.nextInt(); 
+          
+            if(respuesta==1 && SeIngreso==false){ //Cargar Arbol
                 Scanner sc = null; 
                 try { 
                     sc = new Scanner(archivo); 
@@ -86,7 +88,11 @@ public class Proyecto2_HaroldMendoza {
                     sc.close(); 
                 }
                 System.out.println();//salto de linea
-                
+                SeIngreso=true;
+            }else{
+                System.out.println("");
+                System.out.println("Ya se ha llenado el arbol");
+                System.out.println("");
             }  
             if(respuesta==2){ //Ver Jerarquia
                 try {
